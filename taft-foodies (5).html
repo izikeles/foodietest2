@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Taft Foodies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF3EA;--ink:#13261D;--mute:#5B6E63;--green:#0E6B4B;--sun:#FFC83D;--chili:#E4472B;--card:#fff;--line:#D5DFD2}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Figtree,system-ui,sans-serif;overflow-wrap:break-word}
+h1,h2,h3{font-family:'Bricolage Grotesque',system-ui,sans-serif;margin:0;line-height:1.15}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--chili);outline-offset:2px}
+.wrap{max-width:1100px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left)) 0 max(16px,env(safe-area-inset-right))}
+.top{position:sticky;top:0;z-index:50;background:var(--green);color:#fff;padding:10px 0;padding-top:max(10px,env(safe-area-inset-top))}
+.logo{font:800 1.35rem 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em}
+.logo i{font-style:normal;background:var(--sun);color:var(--ink);padding:0 .35em;border-radius:6px;margin-left:.15em}
+.hero{background:var(--green);color:#fff;padding:6px 0 20px}
+.hero h1{font-size:clamp(1.7rem,6vw,2.7rem);font-weight:800;letter-spacing:-.02em}
+.hero p{margin:.5em 0 14px;color:#CFE5D8;font-size:.97rem}
+.search{display:block;width:100%;padding:.75em 1em;border:0;border-radius:12px;background:#fff;color:var(--ink);font-size:16px}
+.search::placeholder{color:#6B7D72}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.bar{margin-top:12px}
+.chip{border:1.5px solid var(--line);background:#fff;color:var(--ink);border-radius:99px;padding:.4em .9em;min-height:40px;cursor:pointer;font-size:.92rem;line-height:1.2}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.bar .chip{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4);color:#fff}
+.bar .chip.on{background:var(--sun);border-color:var(--sun);color:var(--ink)}
+select.chip{max-width:100%;appearance:auto}
+.panel{display:none;background:#fff;color:var(--ink);border-radius:14px;padding:14px;margin-top:12px}
+.panel.open{display:block}
+.grp{margin-bottom:14px}.grp:last-child{margin-bottom:0}
+.lbl{display:block;font-weight:600;font-size:.82rem;color:var(--mute);margin-bottom:6px}
+.btn{border:0;border-radius:99px;padding:.55em 1.1em;min-height:40px;background:var(--sun);color:var(--ink);font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.btn.sm{background:var(--green);color:#fff;font-size:.9rem;padding:.5em 1em}
+.btn.ghost{background:#fff;color:var(--green);border:1.5px solid var(--green)}
+.main{padding-top:16px;padding-bottom:96px}
+#rc{color:var(--mute);font-size:.88rem;margin-bottom:10px}
+#list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:12px;align-content:start}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px;min-width:0}
+.row{display:flex;gap:10px;align-items:flex-start}
+.ic{width:42px;height:42px;flex:none;border-radius:12px;background:#E3EEDF;display:grid;place-items:center;font-size:1.5rem}
+.bd{flex:1;min-width:0}
+.card h3{font-size:1.1rem}
+.sub{font-size:.88rem;color:var(--mute)}
+.price{font-weight:800;color:var(--green);white-space:nowrap}.price s{text-decoration:none;color:#B9C6BC}
+.fav{flex:none;border:0;background:none;font-size:1.6rem;line-height:1;color:#B9C6BC;cursor:pointer;padding:4px 6px;margin:-4px -6px 0 0}
+.fav.on{color:var(--chili)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 6px}
+.tag{font-size:.78rem;font-weight:600;border-radius:6px;padding:1px 8px;background:var(--sun);color:var(--ink)}
+.ob{font-size:.78rem;font-weight:600;border-radius:6px;padding:1px 8px}
+.ob.y{background:#D8F3E3;color:#0A6B3B}.ob.n{background:#FBE3DE;color:#B3321A}.ob.u{background:#ECEFEA;color:var(--mute)}
+.meta{font-size:.9rem;color:var(--mute);margin:2px 0}
+.acts{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:12px}
+.stars{display:inline-flex}
+.stars button{border:0;background:none;font-size:1.5rem;color:#CBD5CC;cursor:pointer;padding:4px 2px;line-height:1}
+.stars button.on{color:var(--sun);text-shadow:0 0 1px #8a6a00}
+.empty{padding:30px 10px;text-align:center;color:var(--mute)}
+footer{padding:0 0 32px;color:var(--mute);font-size:.82rem}
+#fab{position:fixed;right:16px;bottom:max(16px,env(safe-area-inset-bottom));z-index:1000;box-shadow:0 4px 14px #0003;padding:.7em 1.3em}
+#chat{position:fixed;right:16px;bottom:76px;z-index:1100;width:380px;max-width:calc(100vw - 32px);height:min(560px,72vh);background:#fff;border:2px solid var(--green);border-radius:18px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 10px 30px #0004;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .2s,transform .2s,visibility .2s}
+#chat.open{opacity:1;visibility:visible;transform:none}
+.ch{background:var(--green);color:#fff;padding:12px 14px;padding-top:max(12px,env(safe-area-inset-top));font:800 1.1rem 'Bricolage Grotesque',sans-serif;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ch small{display:block;font:400 .78rem Figtree,sans-serif;opacity:.9}
+#cx{border:0;background:rgba(255,255,255,.18);color:#fff;width:40px;height:40px;border-radius:50%;font-size:1.1rem;cursor:pointer;flex:none}
+#msgs{flex:1;min-height:0;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--bg)}
+.m{max-width:90%;padding:.55em .85em;border-radius:14px;font-size:.93rem;background:#fff;border:1px solid var(--line)}
+.m.u{align-self:flex-end;background:var(--ink);color:#fff;border:0}
+.mini{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.mini>div:first-child{min-width:0}
+.mini small{display:block;color:var(--mute)}
+.q{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px 0;background:var(--bg);max-height:104px;overflow-y:auto}
+.q .chip{min-height:36px;font-size:.85rem}
+.cf{display:flex;gap:8px;padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom));background:var(--bg)}
+.cf input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:99px;padding:.5em 1em;font-size:16px;background:#fff}
+.typing{display:flex;gap:5px;padding:.85em 1em;align-self:flex-start}
+.typing span{width:8px;height:8px;border-radius:50%;background:var(--green);opacity:.4;animation:dot 1.1s infinite}
+.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,60%,100%{transform:none;opacity:.4}30%{transform:translateY(-6px);opacity:1}}
+.ov{position:fixed;inset:0;z-index:2000;background:#0A1A13AA;display:grid;place-items:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
+.ov.open{opacity:1;visibility:visible}
+.dlg{background:#fff;border-radius:20px;padding:24px 20px;width:min(100%,380px);text-align:center}
+.dlg p{color:var(--mute);margin:.6em 0 0}
+.big{font-size:2.6rem}
+.ma{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+@media(max-width:600px){
+ #chat{inset:0;width:auto;max-width:none;height:100dvh;border:0;border-radius:0}
+ .main{padding-bottom:88px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><div class="logo">Taft<i>Foodies</i></div></div></header>
+
+<section class="hero"><div class="wrap">
+  <h1>Hungry around Taft Avenue?</h1>
+  <p><span id="count"></span> food places from Pedro Gil to Buendia. See what's open, cheap, or good for studying.</p>
+  <input class="search" id="q" type="search" placeholder="Search a place, cuisine, or street" aria-label="Search places">
+  <div class="chips bar" id="fq"><button class="chip" id="ftog" aria-expanded="false" aria-controls="fpanel">⚙ Filters</button></div>
+  <div class="panel" id="fpanel">
+    <div class="grp"><span class="lbl">Good for</span><div class="chips" id="fv"></div></div>
+    <div class="grp"><span class="lbl">Price</span><div class="chips" id="fp"></div></div>
+    <div class="grp"><span class="lbl">Food</span><div class="chips" id="ft"></div></div>
+    <div class="grp"><label class="lbl" for="sort">Sort by</label>
+      <select id="sort" class="chip"><option value="0">Directory order</option><option value="p">Cheapest first</option><option value="r">Top rated</option><option value="o">Open now first</option></select></div>
+  </div>
+</div></section>
+
+<main class="wrap main">
+  <div id="rc" aria-live="polite"></div>
+  <div id="list"></div>
+</main>
+<footer class="wrap">Hours and prices change, so check places marked "Varies" before you go. "Open now" uses Manila time. Ratings and favorites are saved in this browser only. Study, date and barkada picks are suggestions; wifi, outlets and noise are not verified.</footer>
+
+<button class="btn" id="fab">💬 Ask Foodie</button>
+<section id="chat" aria-label="Foodie assistant">
+  <div class="ch"><div>Foodie<small>Tell me your budget, location, and craving</small></div><button id="cx" aria-label="Close chat">✕</button></div>
+  <div id="msgs"></div>
+  <div class="q" id="quick"></div>
+  <div class="cf"><input id="ci" placeholder="e.g. Korean food under 300" aria-label="Message Foodie"><button class="btn" id="cs">Send</button></div>
+</section>
+
+<div id="gm" class="ov" aria-hidden="true"><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="gt"><div class="big">🚶</div><h2 id="gt">Open Google Maps?</h2><p id="gp"></p><div class="ma"><button class="btn ghost" id="gx">Not now</button><a class="btn" id="go" target="_blank" rel="noopener">Yes, take me there</a></div></div></div>
+<script>
+/* [name, address, hours, cuisine, price(1-4), lat, lng]  — no lat/lng = "Taft / DLSU area" approximate pin */
+const D=[
+["Army Navy Burger + Burrito","2456 Taft Ave., Maryville Dormitory","24 hours","American / Mexican",2,14.5655,120.9938],
+["Thai Mango - Malate","2463 Leon Guinto St.","24 hours","Thai",2,14.5668,120.9928],
+["La Elotes","Unit 2-A, UPad Residences, 912 P. Ocampo St.","11 AM–10 PM daily","Mexican / Street food",1,14.5635,120.9915],
+["Arabic House","912 P. Ocampo St.","Mon–Sat 11 AM–11:50 PM; Sun 1 PM–11:50 PM","Middle Eastern / Arabic",2,14.5636,120.9917],
+["Pho Mahal Restaurant (Xin Chào)","866 P. Ocampo St.","7 AM–10 PM daily","Vietnamese",2,14.5633,120.9925],
+["Tinuhog Ni Benny Barbecue House","879 Dagonoy St., Malate, Manila","9:30 AM–2:30 AM daily","Filipino / BBQ",1,14.5645,120.9918],
+["24 Chicken Leon Guinto","2472 Leon Guinto St., Malate, Manila","10 AM–9 PM daily","Korean-style chicken",1,14.5667,120.993],
+["24 Chicken Pedro Gil - Taft","Taft Ave. corner Pedro Gil St., Paco, Manila","9 AM–9 PM daily","Korean-style chicken",1,14.577,120.9888],
+["City of Wings - Leon Guinto","2585C Leon Guinto cor. P. Ocampo","12 PM–11 PM daily","American / Chicken wings",1,14.564,120.9932],
+["Nitz Restaurant","J. Leon Guinto St.","9 AM–9 PM daily","Filipino",1,14.5669,120.9926],
+["On The Way Fast Food & Cafe","2587 Leon Guinto St., Taft Ave.","Mon–Thu 10 AM–9 PM; Fri–Sun 9 AM–9 PM","Filipino / Fast food / Café",1,14.5666,120.9934],
+["Kaldi Coffee Taft","2195 Taft Ave.","Mon 2 PM–12 AM; Tue–Sat 10:30 AM–2 AM; Sun 10:30 AM–12 AM","Café / Coffee",1,14.5605,120.9958],
+["Windy Ridge Coffee","2202 Taft Ave.","6 AM–10 PM, Mon–Sat","Café / Coffee",1,14.5602,120.9956],
+["U ME KAPE - Taft","G/F Manor Building, 2635-E Taft Ave.","24 hours","Café / Coffee",1,14.5628,120.9948],
+["Coffee Project Co-Lab","G/F Vista Taft Residences, 2587 Taft Ave.","Hours not reliably listed","Café / Coffee / Food",2,14.5632,120.9949],
+["Dapit-Hapon Cafe & Bistro","2/F University Mall, Taft Ave.","10 AM–9 PM, Mon–Sat","Filipino café / Bistro",2,14.5641,120.9941],
+["Subway - Taft Estrada","G/F D'Students Place, 2488 Taft Ave. cor. Estrada","6 AM–12 AM daily","American / Sandwiches",2,14.564,120.9942],
+["Chowking La Salle Taft","Level 1 D'Students Place, 2488 Taft Ave.","24 hours","Chinese-Filipino / Fast food",1,14.5641,120.9943],
+["Pao Myeon - Taft Avenue","Unit 2C, 2/F D'Students Place","8 AM–12 AM","Asian / Noodles",1,14.564,120.9944],
+["Golden Baboy - Taft Avenue","D'Students Place, Taft Ave.","11 AM–10 PM daily","Korean BBQ",3,14.5639,120.9943],
+["Gang Gang Chicken - One Archers' Place","Level 1 One Archers Place, 2311 Taft Ave.","10 AM–10 PM, Mon–Sat","Korean / Fried chicken",2,14.5662,120.9936],
+["Burger Assembly - WH Taft Residences","WH Taft Residences, beside DLSU","10 AM–9 PM, Mon–Sat","American / Burgers",2,14.5658,120.9934],
+["Wok Dis Way Taft (One Archers)","2/F Green Podium, One Archers Place, 2310 Taft Ave.","10 AM–4 PM, Mon–Fri","Asian / Rice meals",1,14.5663,120.9937],
+["Corndog 28 - Taft","Stall #2, East Phase 3 LRT Vito Cruz Station","Mon–Sat 10 AM–10 PM; Sun 10 AM–8 PM","Korean / Corn dogs",1,14.5635,120.9947],
+["Jollibee Taft Ave - Vito Cruz","855 Taft Ave. cor. P. Ocampo","6 AM–10 PM daily","Filipino / Fast food",1,14.5632,120.9944],
+["Kenny Rogers Roasters - Taft Ave","2576 Taft Ave.","24 hours","American / Roast chicken",2,14.5638,120.9946],
+["Bonchon Chicken - University Mall","2057 Taft Ave., University Mall area","9 AM–7 PM daily","Korean / Fried chicken",2,14.5642,120.9941],
+["Davids Tea House - Classic","Unit C 204-C/205, R Square Residence Mall, P. Ocampo","10 AM–9:30 PM daily","Chinese / Asian",2,14.563,120.995],
+["Ersao - R Square Mall","R Square Mall, Taft Ave.","10 AM–10 PM daily","Taiwanese / Chinese",1,14.563,120.9951],
+["Gerry's Grill - R Square","R Square Mall, 2587 Taft Ave. cor. P. Ocampo","10 AM–9 PM daily","Filipino / Grill",3,14.5631,120.995],
+["Dixie's","2313 Taft Ave.","Mon–Sat 9 AM–9 PM; Sun 10:30 AM–9 PM","Filipino / Casual dining",2,14.566,120.9934],
+["Chef Bab's Sisig","2/F University Mall","9 AM–9 PM daily","Filipino / Sisig",1,14.564,120.9941],
+["Rodic's Diner","1452 Taft Ave., Ermita","7 AM–6:30 PM daily","Filipino / Diner",1,14.5805,120.9861],
+["Pizza Hut Buendia Taft","2124 Sen. Gil J. Puyat Ave. cor. Taft Ave.","10 AM–12 AM daily","American / Pizza",3,14.5543,120.997],
+["Agno Food Court","2305 Fidel A. Reyes St.","Mon–Fri 7:30 AM–6:30 PM; Sat 8:30 AM–3:30 PM","Filipino / Food court",1,14.5655,120.9925],
+["Bamboo Giant Garden Restaurant & Bar","824-A San Andres St. cor. Taft/Quirino","4 PM–2 AM daily","Filipino / Asian / Bar",3,14.5703,120.9905],
+["Izakaya Ichi Ryu","85 F.B. Harrison St.","Generally 11 AM–2 PM, 5–11 PM","Japanese",3,14.56,120.9925],
+["Umi Matsu Japanese Restaurant","1/F Chungdam Building, 560 Remedios St.","11 AM–12 AM","Japanese",3,14.571,120.989],
+["Chung Dam Korean Casual Dining","2/F, 590 Remedios St.","11 AM–12 AM","Korean",3,14.5711,120.9892],
+["Manam - Robinsons Place Manila","L1 Midtown Wing, Robinsons Place Manila, Pedro Gil","10 AM–10 PM daily","Filipino",3,14.5765,120.9846],
+["The Century Seafood Restaurant","599 P. Ocampo St.","11 AM–2:30 PM & 6–10 PM daily","Chinese / Seafood / Asian",4,14.5628,120.9895],
+["Cello's Doughnuts","Taft / DLSU area","Varies","Desserts / Doughnuts",1],
+["Cerealicious","Taft / DLSU area","Varies","Desserts / Cereal",1],
+["Citea","Taft / DLSU area","Varies","Tea / Drinks",1],
+["Coffee Bean & Tea Leaf","Taft / DLSU area","Varies","Café / Coffee",2],
+["Di'Marks","Taft / DLSU area","Varies","Food / Fast food",1],
+["Dreemhaus","Taft / DLSU area","Varies","Café / Food",2],
+["Dimsum and Dumplings","Taft / DLSU area","Varies","Chinese / Dimsum",1],
+["Figaro","Taft / DLSU area","Varies","Café / Coffee",2],
+["Flaming Wings","Taft / DLSU area","Varies","American / Chicken wings",2],
+["Goldilocks","Taft / DLSU area","Varies","Filipino / Bakery / Desserts",1],
+["Greenwich","Taft / DLSU area","Varies","Filipino / Pizza / Pasta",1],
+["Haato Cafe","Taft / DLSU area","Varies","Japanese / Desserts / Café",2],
+["Holly's Cafe","Taft / DLSU area","Varies","Café / Food",2],
+["KFC","Taft / DLSU area","Varies","American / Fast food / Chicken",1],
+["McDonald's","Taft / DLSU area","Varies","American / Fast food",1],
+["Pancake House","Taft / DLSU area","Varies","American / Breakfast",2],
+["Red Ribbon","Taft / DLSU area","Varies","Filipino / Bakery / Desserts",1],
+["Seattle's Best","Taft / DLSU area","Varies","Café / Coffee",2],
+["Starbucks","Taft / DLSU area","Varies","Café / Coffee",2],
+["Tapa King","Taft / DLSU area","Varies","Filipino / Silog",2],
+["Wingstop","Taft / DLSU area","Varies","American / Chicken wings",2],
+["Zark's Burgers","Taft / DLSU area","Varies","American / Burgers",2],
+["The Barn by Borro","2226 Fidel Reyes St.","10 AM–2 AM, Mon–Sat","Café / Filipino / Casual dining",2,14.5666,120.9923],
+["Kuh Meal","Across DLSU near Henry Sy / Torre Lorenzo","Varies","Filipino / Baked mac",2,14.5644,120.9946],
+["24 Chicken EGI Taft Tower","EGI Taft Tower, 2339 Taft Ave., Malate, Manila","10 AM–9 PM daily","Korean-style chicken",1,14.5661,120.9936],
+["24 Chicken Estrada","909 Estrada St., Malate, Manila","9 AM–9 PM daily","Korean-style chicken",1,14.5641,120.9918],
+["El Poco Cantina","945 Estrada St., Malate, Manila","10 AM–10 PM daily","Mexican / Cantina",1,14.5644,120.9913,2]];
+
+const TAGS=[["Filipino",/filipino|sisig|silog/],["American",/american/],["Korean",/korean/],["Japanese",/japanese/],["Chinese & Asian",/chinese|asian|thai|vietnam|taiwan|dimsum/],["Café & Coffee",/caf|coffee|tea/],["Desserts & Bakery",/dessert|bakery|doughnut/],["Chicken & Wings",/chicken|wings/],["Fast food",/fast food/],["Mexican & Middle Eastern",/mexican|arabic|middle/]];
+const SPOTS={"DLSU Main Gate":[14.5648,120.9934],"LRT Vito Cruz":[14.5634,120.9947],"LRT Quirino":[14.5704,120.9914],"LRT Pedro Gil":[14.5769,120.9888],"LRT Gil Puyat (Buendia)":[14.5541,120.9971],"R Square Mall":[14.5631,120.995],"My location":null};
+const PRICE=["Any","₱ under 150","₱₱ 150–300","₱₱₱ 300–500","₱₱₱₱ 500+"];
+const PS=n=>`<span class="price">${"₱".repeat(n)}<s>${"₱".repeat(4-n)}</s></span>`;
+const PR=p=>p.px>p.p?`<span class="price">${"₱".repeat(p.p)}–${"₱".repeat(p.px)}</span>`:PS(p.p);
+const EM=[[/caf|coffee/,"☕"],[/tea|drinks/,"🧋"],[/dessert|doughnut|bakery/,"🍩"],[/burger/,"🍔"],[/pizza/,"🍕"],[/chicken|wings/,"🍗"],[/noodle|pho|viet|ramen/,"🍜"],[/japan/,"🍣"],[/seafood/,"🦐"],[/mexican/,"🌮"],[/arabic|middle/,"🥙"],[/bbq|grill/,"🍢"],[/korean/,"🥘"],[/chinese|asian|taiwan|dimsum/,"🥟"],[/filipino|sisig|silog/,"🍛"],[/sandwich/,"🥪"]];
+const jit=(i,k)=>(((i*37+k*11)%13)-6)*0.00013;
+const places=D.map((d,i)=>{const area=d[5]==null;return{id:i,n:d[0],a:d[1],h:d[2],c:d[3],p:d[4],px:d[7]||d[4],area,
+  lat:area?14.5648+jit(i,1)*10:d[5]+jit(i,2)*.5,lng:area?120.9936+jit(i,3)*10:d[6]+jit(i,4)*.5,
+  e:(EM.find(x=>x[0].test(d[3].toLowerCase()))||[0,"🍽️"])[1],tags:TAGS.filter(t=>t[1].test(d[3].toLowerCase())).map(t=>t[0])}});
+const $=s=>document.querySelector(s);
+let rate=JSON.parse((()=>{try{return localStorage.getItem("tf-r")}catch(e){return null}})()||"{}");
+const S={q:"",p:0,t:"All",s:"0",sel:null,start:"DLSU Main Gate",me:null,v:"",open:0,fav:0};
+let fav=new Set(JSON.parse((()=>{try{return localStorage.getItem("tf-f")}catch(e){return null}})()||"[]"));
+const saveFav=()=>{try{localStorage.setItem("tf-f",JSON.stringify([...fav]))}catch(e){}};
+
+/* hours, open-now and "good for" tags */
+const DN=["sun","mon","tue","wed","thu","fri","sat"],TR=/(\d{1,2})(?::(\d{2}))?\s*(AM|PM)?\s*[–-]\s*(\d{1,2})(?::(\d{2}))?\s*(AM|PM)/gi;
+const mins=(h,m,ap)=>(h%12+(/pm/i.test(ap)?12:0))*60+(+m||0);
+function parseHours(h){if(/24 hours/i.test(h))return[{d:[0,1,2,3,4,5,6],s:0,e:1440}];const o=[];
+ for(const seg of h.split(";")){let d=[0,1,2,3,4,5,6];const dm=seg.match(/(Mon|Tue|Wed|Thu|Fri|Sat|Sun)(?:\s*[–-]\s*(Mon|Tue|Wed|Thu|Fri|Sat|Sun))?/i);
+  if(dm){const a=DN.indexOf(dm[1].toLowerCase()),b=dm[2]?DN.indexOf(dm[2].toLowerCase()):a;d=[];for(let i=a;;i=(i+1)%7){d.push(i);if(i==b)break}}
+  for(const m of seg.matchAll(TR))o.push({d,s:mins(m[1],m[2],m[3]||m[6]),e:mins(m[4],m[5],m[6])})}
+ return o}
+function manila(){const f=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Manila",weekday:"short",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date()),g=t=>f.find(x=>x.type==t).value;return[DN.indexOf(g("weekday").slice(0,3).toLowerCase()),+g("hour")*60+ +g("minute")]}
+const isOpen=p=>{if(!p.r.length)return null;const[d,m]=manila();return p.r.some(x=>x.e>x.s?x.d.includes(d)&&m>=x.s&&m<x.e:(x.d.includes(d)&&m>=x.s)||(x.d.includes((d+6)%7)&&m<x.e))};
+const VIBES=[["study","📚 Study"],["date","💕 Date spot"],["late","🌙 Late night"],["budget","💸 Budget meal"],["group","👯 Barkada"]],VM=Object.fromEntries(VIBES);
+places.forEach(p=>{p.r=parseHours(p.h);p.late=p.r.some(x=>x.e<=x.s||x.e>=1410);const c=p.c.toLowerCase();p.v=[];
+ if(/caf|coffee/.test(c)||/Barn|Dapit/.test(p.n))p.v.push("study");
+ if((p.p>=3&&!/pizza/.test(c))||/Manam|Thai Mango|Dapit|Barn|El Poco|Arabic|Haato|Davids|Dixie|Bamboo|Holly|Dreemhaus/.test(p.n))p.v.push("date");
+ if(p.late)p.v.push("late");
+ if(p.p==1&&!/caf|coffee|tea|dessert|bakery|doughnut/.test(c))p.v.push("budget");
+ if(/bbq|grill|seafood|pizza|wings|dimsum|bar/.test(c)||p.p>=3)p.v.push("group")});
+const ob=p=>{const o=isOpen(p);return`<span class="ob ${o===null?"u":o?"y":"n"}" data-id="${p.id}">${o===null?"Check hours":o?"● Open now":"Closed now"}</span>`};
+const heart=p=>{const f=fav.has(p.n);return`<button class="fav${f?" on":""}" data-act="fav" data-id="${p.id}" aria-pressed="${f}" aria-label="${f?"Remove from":"Add to"} favorites">${f?"♥":"♡"}</button>`};
+setInterval(()=>document.querySelectorAll(".ob").forEach(el=>{el.outerHTML=ob(places[+el.dataset.id])}),60000);
+
+/* filters UI */
+PRICE.forEach((l,i)=>{const b=document.createElement("button");b.className="chip"+(i?"":" on");b.textContent=l;b.onclick=()=>{S.p=i;chips("#fp",b);draw()};$("#fp").append(b)});
+["All",...TAGS.map(t=>t[0])].forEach(t=>{const b=document.createElement("button");b.className="chip"+(t=="All"?" on":"");b.textContent=t;b.onclick=()=>{S.t=t;chips("#ft",b);draw()};$("#ft").append(b)});
+function chips(sel,b){document.querySelectorAll(sel+" .chip").forEach(c=>c.classList.toggle("on",c==b))}
+$("#q").oninput=e=>{S.q=e.target.value.toLowerCase();draw()};
+$("#sort").onchange=e=>{S.s=e.target.value;draw()};
+[["","Any"],...VIBES].forEach(([k,l])=>{const b=document.createElement("button");b.className="chip"+(k?"":" on");b.textContent=l;b.onclick=()=>{S.v=k;chips("#fv",b);draw()};$("#fv").append(b)});
+const qb=(h,key)=>{const b=document.createElement("button");b.className="chip";b.innerHTML=h;b.onclick=()=>{S[key]=!S[key];b.classList.toggle("on",S[key]);draw()};$("#fq").append(b)};
+qb("🟢 Open now","open");qb('♥ Favorites <b id="fc"></b>',"fav");
+const fcount=()=>{$("#fc").textContent=fav.size?"("+fav.size+")":""};
+$("#count").textContent=places.length;
+
+$("#ftog").onclick=()=>{const o=$("#fpanel").classList.toggle("open");$("#ftog").setAttribute("aria-expanded",o)};
+/* list */
+function stars(p){const r=rate[p.id]||0;return`<span class="stars" aria-label="Your rating: ${r} of 5">`+[1,2,3,4,5].map(v=>`<button data-act="rate" data-id="${p.id}" data-v="${v}" class="${v<=r?"on":""}" aria-label="Rate ${v} star${v>1?"s":""}">★</button>`).join("")+"</span>"}
+function draw(){fcount();
+ let L2=places.filter(p=>(!S.p||(S.p>=p.p&&S.p<=p.px))&&(S.t=="All"||p.tags.includes(S.t))&&(p.n+p.a+p.c).toLowerCase().includes(S.q)&&(!S.v||p.v.includes(S.v))&&(!S.open||isOpen(p)===true)&&(!S.fav||fav.has(p.n)));
+ if(S.s=="p")L2.sort((a,b)=>a.p-b.p);if(S.s=="r")L2.sort((a,b)=>(rate[b.id]||0)-(rate[a.id]||0));if(S.s=="o")L2.sort((a,b)=>(isOpen(b)===true)-(isOpen(a)===true));
+ $("#rc").textContent=L2.length+(L2.length==1?" place":" places");
+ {const a=(S.p?1:0)+(S.t!="All")+(S.v?1:0)+(S.s!="0");$("#ftog").textContent="⚙ Filters"+(a?" ("+a+")":"")}
+ $("#list").innerHTML=L2.length?L2.map((p,i)=>`<article class="card" id="c${p.id}"><div class="row"><div class="ic">${p.e}</div><div class="bd"><h3>${p.n}</h3><div class="sub">${p.c} · ${PR(p)}</div></div>${heart(p)}</div>
+  <div class="tags">${ob(p)}${/24 hours/.test(p.h)?'<span class="tag">Open 24 hours</span>':""}</div>
+  <div class="meta">📍 ${p.a}</div><div class="meta">🕒 ${p.h}</div>
+  <div class="acts"><button class="btn sm" data-act="walk" data-id="${p.id}">Walk there</button>${stars(p)}</div></article>`).join(""):`<div class="empty">${S.fav&&!fav.size?"No favorites yet. Tap the ♡ on a place to save it.":"No places match. Try different filters."}</div>`;
+}
+
+/* Google Maps hand-off */
+const km=(a,b)=>{const r=Math.PI/180,x=(b[1]-a[1])*r*Math.cos(a[0]*r),y=(b[0]-a[0])*r;return Math.hypot(x,y)*6371000};
+const getMe=()=>S.me?Promise.resolve(S.me):new Promise(r=>{const f=()=>r(SPOTS["DLSU Main Gate"]);if(!navigator.geolocation)return f();const t=setTimeout(f,7000);navigator.geolocation.getCurrentPosition(g=>{clearTimeout(t);r(S.me=[g.coords.latitude,g.coords.longitude])},()=>{clearTimeout(t);f()},{timeout:6000})});
+const gmaps=p=>`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(p.area?p.n+" near De La Salle University Taft Avenue Manila":p.n+" "+p.a+(/Manila/.test(p.a)?"":" Manila"))}&travelmode=walking&dir_action=navigate`;
+let back;
+function askWalk(id){const p=places[id];back=document.activeElement;
+ $("#gp").innerHTML=`Google Maps will open with <b>walking directions</b> to <b>${p.n}</b>, starting from where you are right now.`;
+ $("#go").href=gmaps(p);$("#gm").classList.add("open");$("#gm").setAttribute("aria-hidden","false");$("#go").focus()}
+const closeAsk=()=>{$("#gm").classList.remove("open");$("#gm").setAttribute("aria-hidden","true");back&&back.focus&&back.focus()};
+$("#gx").onclick=closeAsk;$("#go").onclick=()=>setTimeout(closeAsk,250);$("#gm").onclick=e=>{if(e.target.id=="gm")closeAsk()};
+document.addEventListener("keydown",e=>{if(e.key=="Escape")closeAsk()});
+
+/* ratings + clicks */
+document.addEventListener("click",e=>{
+ const b=e.target.closest("[data-act]");if(!b)return;const id=+b.dataset.id,a=b.dataset.act;
+ if(a=="rate"){const v=+b.dataset.v;rate[id]=rate[id]==v?0:v;try{localStorage.setItem("tf-r",JSON.stringify(rate))}catch(_){}
+  if(S.s=="r")draw();else b.closest(".stars").outerHTML=stars(places[id])}
+ else if(a=="fav"){const n=places[id].n,f=!fav.has(n);f?fav.add(n):fav.delete(n);saveFav();
+  if(S.fav)draw();else{b.classList.toggle("on",f);b.textContent=f?"♥":"♡";b.setAttribute("aria-pressed",f);b.setAttribute("aria-label",(f?"Remove from":"Add to")+" favorites");fcount()}}
+ else if(a=="walk")askWalk(id);
+});
+
+/* Foodie assistant (rule-based: reads budget, location, and craving from your message) */
+const WANT=[[/korean|kbbq|samgyup/,/korean/],[/filipino|pinoy|sisig|silog|adobo|local/,/filipino|sisig|silog/],[/japan|sushi|izakaya/,/japan/],[/chicken|wings|fried/,/chicken|wings/],[/burger/,/burger/],[/coffee|cafe|café|latte|chill/,/caf|coffee/],[/dessert|sweet|cake|donut|doughnut|bake/,/dessert|bakery|doughnut/],[/\btea\b|drink|milk tea/,/tea|drinks/],[/noodle|pho|ramen/,/noodle|pho|viet/],[/seafood/,/seafood/],[/pizza|pasta/,/pizza|pasta/],[/mexican|burrito|taco/,/mexican/],[/chinese|dimsum|dumpling/,/chinese|dimsum/],[/thai|arab|middle eastern/,/thai|arab|middle/],[/bbq|grill|inihaw/,/bbq|grill/],[/fast ?food/,/fast food/],[/breakfast|pancake/,/breakfast/],[/sandwich/,/sandwich/],[/rice meal/,/rice meal/]];
+const VW=[[/study|studying|review|thesis|laptop|wifi|work from/,"study"],[/\bdates?\b|romantic|anniversary|jowa|girlfriend|boyfriend|crush/,"date"],[/barkada|group|friends|hangout|celebrat/,"group"]];
+const LOC=[[/dlsu|la salle|archers|henry sy|estrada|dagonoy/,"DLSU Main Gate"],[/vito cruz|r ?square|ocampo/,"LRT Vito Cruz"],[/pedro gil|robinsons|ermita/,"LRT Pedro Gil"],[/quirino|remedios|malate church/,"LRT Quirino"],[/buendia|gil puyat|pasay/,"LRT Gil Puyat (Buendia)"],[/leon guinto/,null,[14.5667,120.9928]]];
+const msg=(h,u)=>{if(!u)document.querySelectorAll(".typing").forEach(x=>x.remove());const m=document.createElement("div");m.className="m"+(u?" u":"");m.innerHTML=h;$("#msgs").append(m);$("#msgs").scrollTop=1e9};
+async function foodie(t){
+ const s=t.toLowerCase().replace(/24 ?(h|hrs|hours|\/7)/g,"24h");
+ let max=4,note="";const n=s.replace(/,/g,"").match(/(\d{2,4})/);
+ if(n){const v=+n[1];max=v<=150?1:v<=300?2:v<=500?3:4;note=`budget about ₱${v} per person`}
+ else if(/cheap|tipid|mura|budget/.test(s)){max=1;note="a tight budget"}
+ const want=WANT.filter(w=>w[0].test(s)).map(w=>w[1]);
+ const late=/24h|\blate\b|midnight|overnight/.test(s),now=/open now|right now|still open/.test(s),wantFav=/favou?rites?|saved/.test(s),vw=VW.filter(v=>v[0].test(s)).map(v=>v[1]);
+ const known=want.length||vw.length||n||late||now||wantFav||/cheap|tipid|mura|budget/.test(s)||LOC.some(l=>l[0].test(s));
+ let o=SPOTS["DLSU Main Gate"],where="DLSU";
+ if(/near me|nearby|around me|my location|\bhere\b/.test(s)){o=await getMe();where="you"}
+ else{const l=LOC.find(l=>l[0].test(s));if(l){o=l[2]||SPOTS[l[1]];where=l[1]||"Leon Guinto"}}
+ if(wantFav&&!fav.size)return msg("You don't have favorites yet. Tap the ♡ on any place and I'll remember it.");
+ let r=places.filter(p=>p.p<=max&&(!want.length||want.some(w=>w.test((p.c+" "+p.n).toLowerCase())))&&(!late||p.late)&&(!now||isOpen(p)===true)&&(!vw.length||vw.some(k=>p.v.includes(k)))&&(!wantFav||fav.has(p.n)));
+ r=r.map(p=>({p,d:km(o,[p.lat,p.lng])-(rate[p.id]||0)*60-(p.area?0:40)})).sort((a,b)=>a.d-b.d).slice(0,4);
+ if(!r.length)return msg("I couldn't find a match. Try a higher budget or a different food type, like Korean, coffee, or burgers. (If you asked for open now, they may all be closed.)");
+ msg((known?`Here are my top picks near ${where}${note?` (${note})`:""}:`:`I didn't catch a budget or food type, so these are spots near ${where}. Try <i>Korean under ₱300</i>.`)+r.map(({p})=>{const m=Math.max(1,Math.round(km(o,[p.lat,p.lng])*1.3/80));
+  return`<div class="mini"><div>${p.e} <b>${p.n}</b> ${PR(p)}<small>${p.c} · ~${m} min walk · ${isOpen(p)===null?"check hours":isOpen(p)?"open now":"closed now"}</small></div><div><button class="btn sm" data-act="walk" data-id="${p.id}">Walk there</button></div></div>`}).join(""));
+}
+const typing=()=>{const m=document.createElement("div");m.className="m typing";m.setAttribute("role","status");m.setAttribute("aria-label","Foodie is typing");m.innerHTML="<span></span><span></span><span></span>";$("#msgs").append(m);$("#msgs").scrollTop=1e9};
+let busy=0;
+function send(t){t=(t||$("#ci").value).trim();if(!t||busy)return;busy=1;$("#ci").value="";msg(t.replace(/</g,"&lt;"),1);typing();
+ setTimeout(()=>foodie(t).catch(()=>msg("Something went wrong. Try: <i>Korean food under ₱300 near DLSU</i>.")).finally(()=>busy=0),800+Math.random()*500)}
+$("#cs").onclick=()=>send();$("#ci").onkeydown=e=>{if(e.key=="Enter")send()};
+const tog=()=>$("#chat").classList.toggle("open");$("#fab").onclick=tog; $("#cx").onclick=tog;
+["📚 Study spot near DLSU","💕 Date spot under ₱600","Open now, cheap eats","Korean food under ₱300","24 hours open"].forEach(q=>{const b=document.createElement("button");b.className="chip";b.textContent=q;b.onclick=()=>send(q);$("#quick").append(b)});
+msg("Hi, I'm Foodie! Tell me your budget, where you are, and what you want. I can find study spots, date spots, places open now, or your favorites. Try: <i>study spot near DLSU</i>.");
+draw();
+</script>
+</body>
+</html>
